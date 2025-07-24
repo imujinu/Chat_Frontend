@@ -25,6 +25,7 @@
 </template>
 <script>
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 export default {
   data() {
     return {
@@ -40,7 +41,11 @@ export default {
         data
       );
       const token = response.data.token;
+      const role = jwtDecode(token).role;
+      const email = jwtDecode(token).sub;
       localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("email", email);
       window.location.href = "/";
     },
   },
