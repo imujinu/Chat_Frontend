@@ -43,11 +43,19 @@ export default {
       stompClient: null,
       token: "",
       senderEmail: "",
+      roomId: null,
     };
   },
-  created() {
+  async created() {
     this.connectWebsocket();
+    //route의 파라미터로 들어오는 roomId라는 값을 받겠다.
+    this.roomId = this.$route.params.roomId;
     this.senderEmail = localStorage.getItem("email");
+
+    const response = await axios.get(
+      `${process.env.VUE_APP_API_BASE_URL}/chat/room/group/list`
+    );
+    this.chatRoomList = response.data;
   },
   beforeUnmount() {
     this.disconnectWebSocket();
@@ -79,7 +87,7 @@ export default {
         senderEmail: this.senderEmail,
         message: this.newMessage,
       };
-      this.stompClient.send("/publish/1", JSON.stringify(message));
+      this.stompClient.send(`/publish/${roomId}`, JSON.stringify(message));
       this.newMessage = "";
     },
     scrollToBottom() {
