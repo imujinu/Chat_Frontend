@@ -32,7 +32,7 @@
 <script>
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   data() {
@@ -53,9 +53,9 @@ export default {
     this.senderEmail = localStorage.getItem("email");
 
     const response = await axios.get(
-      `${process.env.VUE_APP_API_BASE_URL}/chat/room/group/list`
+      `${process.env.VUE_APP_API_BASE_URL}/chat/history/${this.roomId}`
     );
-    this.chatRoomList = response.data;
+    this.messages = response.data;
   },
   beforeUnmount() {
     this.disconnectWebSocket();
@@ -73,11 +73,18 @@ export default {
           Authorization: `Bearer ${this.token}`,
         },
         () => {
-          this.stompClient.subscribe(`/topic/1`, (message) => {
-            const parseMessage = JSON.parse(message.body);
-            this.messages.push(parseMessage);
-            this.scrollToBottom();
-          });
+          //처음 연결 시 토큰 여부로 방의 참여중인지 아닌지를 알 수 있음
+          this.stompClient.subscribe(
+            `/topic/1`,
+            (message) => {
+              const parseMessage = JSON.parse(message.body);
+              this.messages.push(parseMessage);
+              this.scrollToBottom();
+            },
+            {
+              Authorization: `Bearer ${this.token}`,
+            }
+          );
         }
       );
     },
@@ -87,7 +94,8 @@ export default {
         senderEmail: this.senderEmail,
         message: this.newMessage,
       };
-      this.stompClient.send(`/publish/${roomId}`, JSON.stringify(message));
+
+      this.stompClient.send(`/publish/${this.roomId}`, JSON.stringify(message));
       this.newMessage = "";
     },
     scrollToBottom() {
