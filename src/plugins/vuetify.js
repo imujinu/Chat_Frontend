@@ -1,10 +1,7 @@
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
 
-export default createVuetify(
-{
-    components
-}
-
-)
+export default createVuetify({
+  components,
+});
