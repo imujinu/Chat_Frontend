@@ -78,6 +78,7 @@ export default {
           this.stompClient.subscribe(
             `/topic/1`,
             (message) => {
+              console.log("messageBody::" + message.body);
               const parseMessage = JSON.parse(message.body);
               this.messages.push(parseMessage);
               this.scrollToBottom();
@@ -105,7 +106,10 @@ export default {
         chatBox.scrollTop = chatBox.scrollHeight;
       });
     },
-    disconnectWebSocket() {
+    async disconnectWebSocket() {
+      await axios.post(
+        `${process.env.VUE_APP_API_BASE_URL}/chat/room/${this.roomId}/read`
+      );
       if (this.stompClient && this.stompClient.connected) {
         this.stompClient.unsubscribe("/topic/1");
         this.stompClient.disconnect();
