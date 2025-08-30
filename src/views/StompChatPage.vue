@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     connectWebsocket() {
+      //기존 연결 정보가 존재하면 바로 return
       if (this.stompClient && this.stompClient.connected) return;
       // sockjs는 websocket을 내장한 js 라이브러리, http 엔드포인트 사용.
       const sockJs = new SockJS(`${process.env.VUE_APP_API_BASE_URL}/connect`);

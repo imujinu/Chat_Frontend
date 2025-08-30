@@ -70,7 +70,6 @@ export default {
     async createChatRoom() {
       await axios.post(
         `${process.env.VUE_APP_API_BASE_URL}/chat/room/group/create?roomName=${this.newRoomTitle}`,
-        // post 요청은 바디의 입력을 기대하기 때문에 null을 받아줌
         null
       );
       this.showCreateRoomModal = false;

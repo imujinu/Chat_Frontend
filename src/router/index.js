@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/groupChatting/list",
     name: "GroupChattingList",
-    component: GroupChattingList,
+    component: GroupChattingList  ,
   },
 ];
 
