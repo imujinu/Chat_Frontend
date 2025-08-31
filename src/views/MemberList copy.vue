@@ -47,7 +47,6 @@ export default {
   },
   methods:{
     async startChat(otherMemberId){
-      // 기존의 채팅방이 있으면 return 받고, 없으면 새롭게 생성된 roomId return 
        const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/member/list`)
        const roomId = response.data;
        this.$router.push(`chatpage/${roomId}`)
